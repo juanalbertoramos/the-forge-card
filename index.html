@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Forge</title>
+<meta name="description" content="The Forge — everything our Cor group needs: prayer, formation, fraternity. Scan or tap to open it on your phone.">
+<meta name="theme-color" content="#070a12">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="The Forge">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Forge">
+<meta property="og:description" content="Everything our Cor group needs: prayer, formation, fraternity. Iron sharpens iron.">
+<meta property="og:image" content="https://juanalbertoramos.github.io/the-forge-card/bg.jpg">
+<link rel="preload" href="fonts/cinzel-decorative-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/cormorant-garamond-italic.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Cinzel Decorative";font-weight:700;font-display:swap;src:url(fonts/cinzel-decorative-700.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:400 600;font-display:swap;src:url(fonts/cormorant-garamond-italic.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-weight:400 600;font-display:swap;src:url(fonts/inter.woff2) format("woff2")}
+:root{
+  --gold-bright:#ecdca6; --cream:#fff6e2; --ink:#1b140a; --night:4,6,12;
+  --grad-gold:linear-gradient(135deg,#fffaf0 0%,#f5e6bd 38%,#e2c77f 72%,#d4b264 100%);
+  --grad-button:linear-gradient(135deg,#fff3d0 0%,#ecdca6 30%,#c8a44d 65%,#9a7b2e 100%);
+  /* the darkest colour each overlay text can take; tests/verify.py measures contrast against the video with these */
+  --tc-kicker:#ecdca6; --tc-title:#d4b264; --tc-sub:#fff6e2;
+  /* type scale (4 sizes) and 8-pt spacing */
+  --fs-s:14px; --fs-m:17px; --fs-l:19px; --fs-xl:clamp(30px,9.6vw,40px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#070a12}
+body{font-family:"Inter",-apple-system,system-ui,sans-serif;color:var(--cream);-webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;overflow:hidden}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;-webkit-user-select:none;user-select:none}
+:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px}
+
+/* The living background: a seamless loop (the Kling clip forward, then reversed). The poster paints first. */
+.bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 42%;z-index:0}
+.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(var(--night),.72) 0%,rgba(var(--night),.35) 24%,rgba(var(--night),0) 36%,
+    rgba(var(--night),0) 58%,rgba(var(--night),.6) 70%,rgba(var(--night),.9) 100%)}
+
+.ui{position:relative;z-index:2;height:100%;max-width:480px;margin:0 auto;display:flex;flex-direction:column;
+  padding:calc(env(safe-area-inset-top) + 8px) 16px calc(env(safe-area-inset-bottom) + 16px)}
+/* title group: eyebrow, title and subtitle belong together (proximity) over a dark halo for legibility */
+.titles{position:relative;text-align:center;margin-top:8px;margin-bottom:auto}
+.emblem{display:block;width:clamp(84px,24vw,112px);height:auto;margin:0 auto 10px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.7))}
+/* a soft-edged dark band behind the whole title group (a film title card): the cross rises out of it,
+   and every line of text keeps >= 4.5:1 against the brightest frame of the loop (tests/verify.py) */
+.titles::before{content:"";position:absolute;inset:-28px -16px -24px;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(var(--night),0) 0%,rgba(var(--night),.86) 12%,rgba(var(--night),.86) 80%,rgba(var(--night),0) 100%);
+  -webkit-mask:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%);
+  mask:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%)}
+.kicker{font:600 var(--fs-s)/1.4 "Inter";letter-spacing:.12em;text-transform:uppercase;color:var(--tc-kicker);
+  margin-bottom:8px;text-wrap:balance;text-shadow:0 1px 8px rgba(0,0,0,.7)}
+h1{font:700 var(--fs-xl)/.95 "Cinzel Decorative",Georgia,serif;letter-spacing:.04em;
+   background:var(--grad-gold);-webkit-background-clip:text;background-clip:text;color:transparent;
+   filter:drop-shadow(0 2px 14px rgba(0,0,0,.9)) drop-shadow(0 0 2px rgba(0,0,0,.7))}
+.sub{font:italic 500 var(--fs-l)/1.22 "Cormorant Garamond",Georgia,serif;color:var(--tc-sub);max-width:32ch;margin:8px auto 0;
+  text-wrap:balance;text-shadow:0 1px 12px rgba(0,0,0,.9)}
+
+.panel{border-radius:24px;padding:16px;background:rgba(10,12,20,.46);
+  -webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);
+  box-shadow:inset 0 0 0 1px rgba(236,220,166,.22),0 24px 44px -22px rgba(0,0,0,.8)}
+.scan{display:flex;gap:16px;align-items:center}
+.qr-btn{flex:0 0 152px;border-radius:16px;transition:transform .15s}
+.qr-btn:active{transform:scale(.97)}
+.qr{display:block;width:152px;height:152px;border-radius:16px;background:#fff}
+.scan h2{font:600 var(--fs-m)/1.25 "Inter";margin-bottom:8px}
+.scan p{font:400 var(--fs-s)/1.45 "Inter";color:rgba(255,246,226,.86)}
+.share{margin-top:16px;width:100%;height:56px;border-radius:16px;background:var(--grad-button);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;gap:8px;font:600 var(--fs-m)/1 "Inter";
+  box-shadow:0 12px 26px -12px rgba(200,164,77,.55),inset 0 1px 0 rgba(255,255,255,.45);transition:transform .15s}
+.share:active{transform:scale(.985)}
+.share svg{width:20px;height:20px}
+@media (max-width:359px){.scan{flex-direction:column;text-align:center}}
+/* short phones (iPhone SE): a slightly smaller QR and emblem keep the fire visible between title and panel */
+@media (max-height:740px){.emblem{width:72px;margin-bottom:6px}.panel{padding:12px}.scan{gap:12px}.qr-btn{flex-basis:128px}.qr{width:128px;height:128px}.share{height:52px;margin-top:12px}}
+
+/* tap the QR: full-screen on white, for scanning across a table */
+.qr-overlay{position:fixed;inset:0;z-index:5;display:grid;place-items:center;align-content:center;gap:16px;padding:24px;
+  background:rgba(var(--night),.97);opacity:0;transition:opacity .2s}
+.qr-overlay.open{opacity:1}
+.qr-overlay[hidden]{display:none}
+.qr-card{width:min(88vw,420px);background:#fff;border-radius:24px;padding:24px;text-align:center;color:var(--ink)}
+.qr-card img{display:block;width:100%;height:auto}
+.qr-card p{margin-top:16px;font:500 var(--fs-m)/1.3 "Inter"}
+.qr-close{position:fixed;top:calc(env(safe-area-inset-top) + 8px);right:16px;width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.qr-close svg{width:18px;height:18px;color:#fff}
+/* Apple's official Add to Apple Wallet badge, used exactly as provided (its grey outline is Apple's version for
+   dark backgrounds): no effects, no dimming, no animation; padding keeps Apple's clear space of .1 x its height */
+.wallet-link{display:inline-flex;padding:5px;border-radius:12px}
+.wallet-link img{display:block;width:152px;height:48px}
+.wallet-link[hidden]{display:none}
+
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 96px);z-index:4;transform:translate(-50%,16px);opacity:0;
+  max-width:86vw;padding:8px 16px;border-radius:999px;background:rgba(10,12,20,.9);color:var(--cream);
+  font:500 var(--fs-s)/1.4 "Inter";text-align:center;box-shadow:inset 0 0 0 1px rgba(236,220,166,.25);
+  transition:opacity .25s,transform .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* short screens (landscape phones): let the page scroll so nothing is cut off */
+@media (max-height:560px){body{overflow:auto}.ui{height:auto;min-height:100%}}
+/* measurement mode for tests/verify.py: hide the overlay text, keep everything behind it */
+.measure-bg .kicker,.measure-bg h1,.measure-bg .sub{visibility:hidden}
+</style>
+</head>
+<body>
+<video class="bg" poster="bg.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+  <source src="bg-hevc.mp4" type='video/mp4; codecs="hvc1"'>
+  <source src="bg.mp4" type="video/mp4">
+</video>
+<div class="scrim"></div>
+
+<main class="ui">
+  <header class="titles">
+    <img class="emblem" src="emblem.svg" width="112" height="132" alt="The Forge emblem: a shield with a budded cross">
+    <p class="kicker">Prayer · Formation · Fraternity</p>
+    <h1>The Forge</h1>
+    <p class="sub">Iron sharpens iron</p>
+  </header>
+
+  <section class="panel" aria-label="Share The Forge">
+    <div class="scan">
+      <button class="qr-btn" id="qrBtn" type="button" aria-label="Show the QR code full screen">
+        <img class="qr" id="qr" src="qr.svg" width="152" height="152" alt="QR code that opens The Forge">
+      </button>
+      <div>
+        <h2>Scan to open The Forge</h2>
+        <p>Point your phone's camera at the code, or tap it to make it bigger.</p>
+      </div>
+    </div>
+    <button class="share" id="share" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m8 7 4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Share</button>
+  </section>
+</main>
+
+<div class="qr-overlay" id="qrOverlay" role="dialog" aria-modal="true" aria-label="QR code" hidden>
+  <div class="qr-card">
+    <img src="qr.svg" width="372" height="372" alt="QR code that opens The Forge">
+    <p>Scan to open <em>The Forge</em></p>
+  </div>
+  <button class="qr-close" id="qrClose" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const READER = 'https://the-forge-cor.pages.dev/';
+  const SHARE = {
+    title: 'The Forge',
+    text: "The Forge — everything our Cor group needs: prayer, formation, fraternity.",
+    url: READER,
+  };
+
+  const toastEl = document.getElementById('toast');
+  function toast(message) {
+    toastEl.textContent = message;
+    toastEl.classList.add('show');
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => toastEl.classList.remove('show'), 2600);
+  }
+
+  // One button: the iPhone share sheet (WhatsApp, Messages, Mail, AirDrop, Copy); copy the message where there is none.
+  document.getElementById('share').addEventListener('click', async () => {
+    if (navigator.share) {
+      try { await navigator.share(SHARE); } catch (e) { /* share sheet dismissed */ }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(`${SHARE.text} ${SHARE.url}`);
+      toast('Link copied. Paste it into any message.');
+    } catch (e) {
+      toast(SHARE.url);
+    }
+  });
+
+  // The loop always plays. iOS can hold it back (Low Power Mode blocks autoplay; returning from the background
+  // pauses it), so start it on load, whenever the card comes back into view, and on the first touch anywhere.
+  const video = document.querySelector('.bg');
+  const playLoop = () => { if (video.paused) video.play().catch(() => {}); };
+  playLoop();
+  video.addEventListener('canplay', playLoop);
+  window.addEventListener('pageshow', playLoop);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) playLoop(); });
+  ['touchstart', 'pointerdown'].forEach((type) => document.addEventListener(type, playLoop, { passive: true }));
+
+  // Tap the QR: show it full screen on white; tap anywhere, the close button or Escape to return.
+  const overlay = document.getElementById('qrOverlay');
+  const qrBtn = document.getElementById('qrBtn');
+  const qrClose = document.getElementById('qrClose');
+  function onOverlayKey(e) {
+    if (e.key === 'Escape') closeQR();
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      qrClose.focus();
+    }
+  }
+  function openQR() {
+    overlay.hidden = false;
+    requestAnimationFrame(() => overlay.classList.add('open'));
+    qrClose.focus();
+    document.addEventListener('keydown', onOverlayKey);
+  }
+  function closeQR() {
+    overlay.classList.remove('open');
+    overlay.hidden = true;
+    document.removeEventListener('keydown', onOverlayKey);
+    qrBtn.focus();
+  }
+  qrBtn.addEventListener('click', openQR);
+  overlay.addEventListener('click', closeQR);
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+  }
+</script>
+</body>
+</html>
