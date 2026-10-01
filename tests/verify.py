@@ -10,8 +10,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "tests" / "out"
-QR_URL = "https://the-forge-cor.pages.dev"   # what the QR encodes
-SHARE_URL = "https://the-forge-cor.pages.dev/"  # what Share sends
+QR_URL = "https://the-forge-cor.pages.dev/e"   # what the QR encodes: the public men's page (no sign-in)
+SHARE_URL = "https://the-forge-cor.pages.dev/e"  # what Share sends
 MIN_CONTRAST = 4.5  # text over imagery: >= 4.5:1 at every sample point (design-principles §10, WCAG 1.4.3)
 STATIC_ASSETS = [
     "bg.jpg", "qr.svg", "emblem.svg", "manifest.webmanifest", "apple-touch-icon.png", "icon-512.png",

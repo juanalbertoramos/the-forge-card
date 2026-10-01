@@ -1,6 +1,6 @@
 // Offline support: the card (and its QR) must open with no signal.
 // Bump CACHE whenever a precached file changes, so phones pick up the new copy.
-const CACHE = 'forge-card-v2';
+const CACHE = 'forge-card-v3';
 const ASSETS = [
   './',
   'index.html',
